@@ -22,6 +22,7 @@
 # include <cfloat>
 # include <cmath>
 # include <sstream>
+# include <limits>
 
 class ScalarConverter
 {

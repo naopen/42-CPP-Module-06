@@ -130,6 +130,7 @@ bool ScalarConverter::isDouble(std::string const &str)
 		}
 	}
 	
+	// Double must have a decimal point to distinguish from int
 	return hasDigit && hasDot;
 }
 
@@ -197,8 +198,20 @@ void ScalarConverter::displayFloat(double value, bool impossible)
 	{
 		// Using static_cast explicitly as required
 		float f = static_cast<float>(value);
-		std::cout << std::fixed << std::setprecision(1) << f;
-		std::cout << "f" << std::endl;
+		// Check if float overflows
+		if (value > std::numeric_limits<float>::max() || 
+		    value < -std::numeric_limits<float>::max())
+		{
+			std::cout << "impossible" << std::endl;
+		}
+		else
+		{
+			// Display with decimal point if it's a whole number
+			if (f == static_cast<int>(f) && f >= INT_MIN && f <= INT_MAX)
+				std::cout << f << ".0f" << std::endl;
+			else
+				std::cout << f << "f" << std::endl;
+		}
 	}
 }
 
@@ -222,7 +235,11 @@ void ScalarConverter::displayDouble(double value, bool impossible)
 	}
 	else
 	{
-		std::cout << std::fixed << std::setprecision(1) << value << std::endl;
+		// Display with decimal point if it's a whole number
+		if (value == static_cast<int>(value) && value >= INT_MIN && value <= INT_MAX)
+			std::cout << value << ".0" << std::endl;
+		else
+			std::cout << value << std::endl;
 	}
 }
 
@@ -310,23 +327,23 @@ void ScalarConverter::convert(std::string const &str)
 		return;
 	}
 	
-	// Check type and convert
+	// Check type and convert - order matters!
 	if (isChar(str))
 	{
 		char c = str[1];
 		convertFromChar(c);
 	}
-	else if (isInt(str))
-	{
-		convertFromInt(str);
-	}
-	else if (isFloat(str))
+	else if (isFloat(str))  // Check float before int/double
 	{
 		convertFromFloat(str);
 	}
-	else if (isDouble(str))
+	else if (isDouble(str))  // Check double before int
 	{
 		convertFromDouble(str);
+	}
+	else if (isInt(str))  // Check int last
+	{
+		convertFromInt(str);
 	}
 	else
 	{
