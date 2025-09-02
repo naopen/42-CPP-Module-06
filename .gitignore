@@ -108,6 +108,11 @@ dkms.conf
 ### macOS ###
 # General
 .DS_Store
+*.o
+*.a
+convert
+serialize
+identify
 .AppleDouble
 .LSOverride
 
