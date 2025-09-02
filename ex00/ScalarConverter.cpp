@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "ScalarConverter.hpp"
+#include <cctype>  // For std::isdigit, std::isprint
 
 // Private constructors and destructor (never called)
 ScalarConverter::ScalarConverter() {}
@@ -22,7 +23,11 @@ ScalarConverter::~ScalarConverter() {}
 bool ScalarConverter::isChar(std::string const &str)
 {
 	// Single character in single quotes: 'c', 'a', etc.
+	// But shell removes quotes, so we also accept single non-digit characters
 	if (str.length() == 3 && str[0] == '\'' && str[2] == '\'')
+		return true;
+	// Single character that is not a digit (handles shell removing quotes)
+	if (str.length() == 1 && !std::isdigit(str[0]))
 		return true;
 	return false;
 }
@@ -330,7 +335,12 @@ void ScalarConverter::convert(std::string const &str)
 	// Check type and convert - order matters!
 	if (isChar(str))
 	{
-		char c = str[1];
+		char c;
+		// Handle both 'a' format and a format
+		if (str.length() == 3 && str[0] == '\'' && str[2] == '\'')
+			c = str[1];
+		else
+			c = str[0];
 		convertFromChar(c);
 	}
 	else if (isFloat(str))  // Check float before int/double
