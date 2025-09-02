@@ -23,6 +23,7 @@
 # include <cmath>
 # include <sstream>
 # include <limits>
+# include <cctype>  // For std::isdigit, std::isprint
 
 class ScalarConverter
 {

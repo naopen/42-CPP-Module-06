@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "ScalarConverter.hpp"
-#include <cctype>  // For std::isdigit, std::isprint
 
 // Private constructors and destructor (never called)
 ScalarConverter::ScalarConverter() {}
