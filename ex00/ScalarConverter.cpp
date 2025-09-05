@@ -211,7 +211,7 @@ void ScalarConverter::displayFloat(double value, bool impossible)
 		else
 		{
 			// Display with decimal point if it's a whole number
-			if (f == static_cast<int>(f) && f >= INT_MIN && f <= INT_MAX)
+			if (f == static_cast<int>(f) && f >= static_cast<float>(INT_MIN) && f <= static_cast<float>(INT_MAX))
 				std::cout << f << ".0f" << std::endl;
 			else
 				std::cout << f << "f" << std::endl;
